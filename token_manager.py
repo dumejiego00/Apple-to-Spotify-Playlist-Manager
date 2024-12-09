@@ -2,11 +2,28 @@ import requests
 from dotenv import load_dotenv
 import os
 import json
+import random
 import time
+import string
 from flask import Flask, request
 
 # Load environment variables from .env file
 load_dotenv()
+
+def generateRandomString(length):
+    """
+    Generates a random string of a given length.
+    
+    :param length: Length of the random string to generate
+    :return: Random string of specified length
+    """
+    # Characters to choose from (letters and digits)
+    characters = string.ascii_letters + string.digits
+    
+    # Randomly select characters and join them to form a string
+    random_string = ''.join(random.choice(characters) for _ in range(length))
+    
+    return random_string
 
 # Retrieve client ID and client secret from environment variables
 client_id = os.getenv('SPOTIFY_CLIENT_ID')
@@ -15,7 +32,7 @@ client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
 # Scopes and redirect URI
 scopes = "playlist-modify-public playlist-modify-private"
 redirect_uri = "http://127.0.0.1:8888/callback"
-state = "34fFs29kd09"
+state = generateRandomString(16)
 
 # Authorization URL
 auth_url = f"https://accounts.spotify.com/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scopes}&state={state}"
