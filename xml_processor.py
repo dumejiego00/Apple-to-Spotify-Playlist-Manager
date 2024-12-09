@@ -8,7 +8,7 @@ CLEANED_CSV_FILE_PATH = 'cleaned_file.csv'    # Output path for cleaned CSV file
 # List of keys (columns) to drop from the DataFrame
 KEYS_TO_DROP = [
     'Track ID', 'Kind',
-    'Disc Number', 'Disc Count', 'Track Number', 'Track Count',
+    'Disc Number', 'Disc Count', 'Track Number', 'Track Count', 'Genre',
     'Playlist Only', 'Sort Album Artist', 'Artist',
     'Date Modified', 'Bit Rate', 'Movement Count', 'Movement Number',
     'Play Date', 'Play Date UTC', 'Grouping',
@@ -18,9 +18,10 @@ KEYS_TO_DROP = [
     'Track Type', 'Purchased', 'Location', 
     'File Folder Count', 'Library Folder Count', 
     'Apple Music', 'Artwork Count', 'Date Added', 'Work',
-    'Comments', 'Movement Name', 'Clean', 'Favorited', 'Loved'
+    'Comments', 'Movement Name', 'Clean', 'Favorited', 'Loved',
+    'Size', 'Play Count', 'Total Time', 'Release Date', 'Composer', 'Explicit', 'Part Of Gapless Album',
+    'Year', 'Album', 'Sample Rate'
 ]
-
 
 # Load XML from a file
 def load_xml_file(file_path):
@@ -87,17 +88,17 @@ def write_to_cleaned_csv(songs_data, output_file_path):
     df.drop(columns=KEYS_TO_DROP, errors='ignore', inplace=True)
 
     # Filling NaNs with the mean of the column
-    df['Album'] = df['Album'].str.title()
-    df['Genre'] = df['Genre'].str.title()
-    df['Size'] = df['Size'].fillna(df['Size'].mean())
-    df['Play Count'] = df['Play Count'].fillna(0)
-    df['Total Time'] = df['Total Time'].fillna(df['Total Time'].mean())
-    df['Release Date'] = pd.to_datetime(df['Release Date'], errors='coerce')
-    df['Composer'] = df['Composer'].fillna('Unknown')
-    df['Explicit'] = df['Explicit'].astype('boolean').fillna(False)
-    df['Part Of Gapless Album'] = df['Part Of Gapless Album'].astype('boolean').fillna(False)
-    df['Year'] = df['Year'].ffill()  # Fill missing values with the last valid observation
-    df['Release Date'] = df['Release Date'].ffill() 
+    # df['Album'] = df['Album'].str.title()
+    # df['Genre'] = df['Genre'].str.title()
+    # df['Size'] = df['Size'].fillna(df['Size'].mean())
+    # df['Play Count'] = df['Play Count'].fillna(0)
+    # df['Total Time'] = df['Total Time'].fillna(df['Total Time'].mean())
+    # df['Release Date'] = pd.to_datetime(df['Release Date'], errors='coerce')
+    # df['Composer'] = df['Composer'].fillna('Unknown')
+    # df['Explicit'] = df['Explicit'].astype('boolean').fillna(False)
+    # df['Part Of Gapless Album'] = df['Part Of Gapless Album'].astype('boolean').fillna(False)
+    # df['Year'] = df['Year'].ffill()  # Fill missing values with the last valid observation
+    # df['Release Date'] = df['Release Date'].ffill() 
     # missing_data = df.isnull().sum()
     # print(missing_data)
     
@@ -121,4 +122,4 @@ def load_process_and_save(xml_file_path):
         print("Failed to extract data from XML.")
 
 if __name__ == "__main__":
-    load_process_and_save("playlist_1.xml")
+    load_process_and_save("playlist.xml")
