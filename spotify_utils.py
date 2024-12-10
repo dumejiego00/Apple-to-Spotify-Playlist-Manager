@@ -56,7 +56,71 @@ def add_track_to_playlist(track_url, playlist_id):
         print(f"Error: {response.status_code}, {response.text}")
         # Handle token expiration or other errors here if necessary
 
+# # Example usage
+# track_url = "https://open.spotify.com/track/3Dw9lMKAtrorXeW0wec1dr?si=b4b785e2131743c3" 
+# playlist_id = "3cDHCxYclYnKR0kgi2l9Cz"  # Replace with your playlist ID
+# add_track_to_playlist(track_url, playlist_id)
+
+def search_track(song_name, artist_name=None):
+    """
+    Searches for a track on Spotify using its name and optionally the album name.
+    
+    Args:
+        song_name (str): Name of the song to search for.
+        album_name (str): Name of the album (optional).
+        
+    Returns:
+        str: The URI of the track if found, else None.
+    """
+    access_token = load_access_token()  # Ensure you have a valid access token
+
+    if not access_token:
+        print("Access token is missing or invalid.")
+        return None
+
+    # Base URL for Spotify search
+    url = "https://api.spotify.com/v1/search"
+
+    # Build the search query
+    query = f"track:{song_name}"
+    if artist_name:
+        query += f" artist:{artist_name}"
+
+    # Request parameters
+    params = {
+        'q': query,
+        'type': 'track',
+        'limit': 1  # Get the top result only
+    }
+
+    # Headers with authorization
+    headers = {
+        'Authorization': f'Bearer {access_token}'
+    }
+
+    # Make the request
+    response = requests.get(url, headers=headers, params=params)
+
+    if response.status_code == 200:
+        results = response.json()
+        tracks = results.get('tracks', {}).get('items', [])
+        if tracks:
+            # Extract and return the track URI
+            track_uri = tracks[0]['uri']
+            print(f"Track found: {tracks[0]['name']} (URI: {track_uri})")
+            return track_uri
+        else:
+            print("No tracks found.")
+            return None
+    else:
+        print(f"Error: {response.status_code}, {response.text}")
+        return None
+
 # Example usage
-track_url = "https://open.spotify.com/track/3Dw9lMKAtrorXeW0wec1dr?si=b4b785e2131743c3"
-playlist_id = "3cDHCxYclYnKR0kgi2l9Cz"  # Replace with your playlist ID
-add_track_to_playlist(track_url, playlist_id)
+if __name__ == "__main__":
+    song_name = "Honey"
+    artist_name = "ciel"  # Optional
+    track_uri = search_track(song_name, artist_name)
+    if track_uri:
+        print(f"Track URI: {track_uri}")
+
