@@ -61,7 +61,7 @@ def add_track_to_playlist(track_url, playlist_id):
 # playlist_id = "3cDHCxYclYnKR0kgi2l9Cz"  # Replace with your playlist ID
 # add_track_to_playlist(track_url, playlist_id)
 
-def search_track(song_name, artist_name=None):
+def search_track(song_name, artist_name):
     """
     Searches for a track on Spotify using its name and optionally the album name.
     
@@ -83,8 +83,7 @@ def search_track(song_name, artist_name=None):
 
     # Build the search query
     query = f"track:{song_name}"
-    if artist_name:
-        query += f" artist:{artist_name}"
+    query += f" artist:{artist_name}"
 
     # Request parameters
     params = {
@@ -118,8 +117,8 @@ def search_track(song_name, artist_name=None):
 
 # Example usage
 if __name__ == "__main__":
-    song_name = "Honey"
-    artist_name = "ciel"  # Optional
+    song_name = "#RICHAXXHAITIAN"
+    artist_name = "Mach-Hommy & KAYTRANADA" 
     track_uri = search_track(song_name, artist_name)
     if track_uri:
         print(f"Track URI: {track_uri}")
