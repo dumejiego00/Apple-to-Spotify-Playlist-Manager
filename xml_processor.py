@@ -20,7 +20,7 @@ KEYS_TO_DROP = [
     'Apple Music', 'Artwork Count', 'Date Added', 'Work',
     'Comments', 'Movement Name', 'Clean', 'Favorited', 'Loved',
     'Size', 'Play Count', 'Total Time', 'Release Date', 'Composer', 'Explicit', 'Part Of Gapless Album',
-    'Year', 'Sample Rate'
+    'Year', 'Sample Rate', 'Album'
 ]
 
 # Load XML from a file
@@ -86,6 +86,9 @@ def write_to_cleaned_csv(songs_data, output_file_path):
     
     # Drop specified keys (columns) from the DataFrame
     df.drop(columns=KEYS_TO_DROP, errors='ignore', inplace=True)
+
+    if 'Name' in df.columns:
+        df['Name'] = df['Name'].str.split('(').str[0].str.strip()
 
     # Filling NaNs with the mean of the column
     # df['Album'] = df['Album'].str.title()
