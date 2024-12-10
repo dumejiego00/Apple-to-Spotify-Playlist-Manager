@@ -1,5 +1,6 @@
 import requests
 from token_manager import load_access_token
+import pandas as pd
 
 def get_playlist_details(playlist_id):
     access_token = load_access_token()
@@ -106,7 +107,7 @@ def search_track(song_name, artist_name):
         if tracks:
             # Extract and return the track URI
             track_uri = tracks[0]['uri']
-            print(f"Track found: {tracks[0]['name']} (URI: {track_uri})")
+            # print(f"Track found: {tracks[0]['name']} (URI: {track_uri})")
             return track_uri
         else:
             print("No tracks found.")
@@ -115,11 +116,42 @@ def search_track(song_name, artist_name):
         print(f"Error: {response.status_code}, {response.text}")
         return None
 
-# Example usage
+# # Example usage
+# if __name__ == "__main__":
+#     song_name = "#RICHAXXHAITIAN"
+#     artist_name = "Mach-Hommy & KAYTRANADA" 
+#     track_uri = search_track(song_name, artist_name)
+#     if track_uri:
+#         print(f"Track URI: {track_uri}")
+
+CLEANED_CSV_FILE_PATH = 'cleaned_file.csv'
+
+# Function to load CSV, search songs, and update Spotify URI
+def update_csv_with_spotify_uris(csv_file_path):
+    # Load the CSV file
+    df = pd.read_csv(csv_file_path)
+    
+    # Ensure Spotify URI column exists
+    if 'Spotify URI' not in df.columns:
+        df['Spotify URI'] = None
+
+    # Iterate through each row and update the Spotify URI
+    for index, row in df.iterrows():
+        if pd.isna(row['Spotify URI']):  # Only search if URI is missing
+            song_name = row['Name']
+            album_artist = row['Album Artist']
+            
+            if pd.notna(song_name) and pd.notna(album_artist):  # Ensure fields are not NaN
+                spotify_uri = search_track(song_name, album_artist)  # Call your search function
+                df.at[index, 'Spotify URI'] = spotify_uri  # Update the DataFrame
+            else:
+                print(f"Skipping row at index {index} due to missing data.")
+
+    # Save the updated CSV back to the same file
+    df.to_csv(csv_file_path, index=False)
+    print(f"Updated CSV saved at '{csv_file_path}'.")
+
+# Run the update function
 if __name__ == "__main__":
-    song_name = "#RICHAXXHAITIAN"
-    artist_name = "Mach-Hommy & KAYTRANADA" 
-    track_uri = search_track(song_name, artist_name)
-    if track_uri:
-        print(f"Track URI: {track_uri}")
+    update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH)
 
