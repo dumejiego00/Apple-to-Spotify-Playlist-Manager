@@ -20,7 +20,7 @@ KEYS_TO_DROP = [
     'Apple Music', 'Artwork Count', 'Date Added', 'Work',
     'Comments', 'Movement Name', 'Clean', 'Favorited', 'Loved',
     'Size', 'Play Count', 'Total Time', 'Release Date', 'Composer', 'Explicit', 'Part Of Gapless Album',
-    'Year', 'Album', 'Sample Rate'
+    'Year', 'Sample Rate'
 ]
 
 # Load XML from a file
@@ -102,6 +102,7 @@ def write_to_cleaned_csv(songs_data, output_file_path):
     # missing_data = df.isnull().sum()
     # print(missing_data)
     
+    df['Spotify URI'] = None
 
     # Save the cleaned DataFrame to a new CSV file
     df.to_csv(output_file_path, index=False)
