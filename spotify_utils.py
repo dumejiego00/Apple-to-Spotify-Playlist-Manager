@@ -125,34 +125,63 @@ def search_track(song_name, artist_name):
 #         print(f"Track URI: {track_uri}")
 
 CLEANED_CSV_FILE_PATH = 'cleaned_file.csv'
+MISSING_URI_FILE_PATH = 'missing_uri_file.csv'
+FOUND_URI_FILE_PATH = 'found_uri_file.csv'
 
 # Function to load CSV, search songs, and update Spotify URI
-def update_csv_with_spotify_uris(csv_file_path):
+import os
+
+def update_csv_with_spotify_uris(csv_file_path, found_uris_file_path, missing_uris_file_path):
+    # Ensure the directories for the output files exist
+    for file_path in [found_uris_file_path, missing_uris_file_path]:
+        output_dir = os.path.dirname(file_path)
+        if output_dir and not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+            print(f"Directory '{output_dir}' created for output files.")
+
     # Load the CSV file
     df = pd.read_csv(csv_file_path)
     
-    # Ensure Spotify URI column exists
-    if 'Spotify URI' not in df.columns:
-        df['Spotify URI'] = None
+    # Lists to store rows for songs with and without URIs
+    found_uris_rows = []
+    missing_uris_rows = []
 
-    # Iterate through each row and update the Spotify URI
+    # Iterate through each row and search for Spotify URI
     for index, row in df.iterrows():
-        if pd.isna(row['Spotify URI']):  # Only search if URI is missing
-            song_name = row['Name']
-            artist = row['Artist']
+        song_name = row['Name']
+        artist = row['Artist']
+        
+        if pd.notna(song_name) and pd.notna(artist):  # Ensure fields are not NaN
+            spotify_uri = search_track(song_name, artist)  # Call your search function
             
-            if pd.notna(song_name) and pd.notna(artist):  # Ensure fields are not NaN
-                spotify_uri = search_track(song_name, artist)  # Call your search function
-                df.at[index, 'Spotify URI'] = spotify_uri  # Update the DataFrame
+            if spotify_uri:
+                row_copy = row.copy()
+                row_copy['Spotify URI'] = spotify_uri  # Add URI to row copy
+                found_uris_rows.append(row_copy)  # Add to found list
             else:
-                print(f"Skipping row at index {index} due to missing data.")
+                missing_uris_rows.append(row)  # Add to missing list
+        else:
+            print(f"Skipping row at index {index} due to missing data.")
+            missing_uris_rows.append(row)  # Add to missing list
 
-    # Save the updated CSV back to the same file
-    df.to_csv(csv_file_path, index=False)
-    print(f"Updated CSV saved at '{csv_file_path}'.")
+    # Save the rows with found URIs to a separate file
+    if found_uris_rows:
+        found_uris_df = pd.DataFrame(found_uris_rows)
+        found_uris_df.to_csv(found_uris_file_path, index=False)
+        print(f"Songs with URIs saved to '{found_uris_file_path}'.")
+    else:
+        print("No songs with URIs found.")
+
+    # Save the rows without URIs to another file
+    if missing_uris_rows:
+        missing_uris_df = pd.DataFrame(missing_uris_rows)
+        missing_uris_df.to_csv(missing_uris_file_path, index=False)
+        print(f"Songs without URIs saved to '{missing_uris_file_path}'.")
+    else:
+        print("No songs without URIs.")
 
 # Run the update function
 if __name__ == "__main__":
-    # update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH)
-    search_track("(Sittin' On) the Dock of the Bay", "Otis Redding")
+    update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH, FOUND_URI_FILE_PATH,MISSING_URI_FILE_PATH)
+    # search_track("(Sittin' On) the Dock of the Bay", "Otis Redding")
 
