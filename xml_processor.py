@@ -88,30 +88,32 @@ def write_to_cleaned_csv(songs_data, output_file_path):
     df.drop(columns=KEYS_TO_DROP, errors='ignore', inplace=True)
 
     if 'Name' in df.columns:
-        # Only split the name on '(' if it does not start with '('
-        df['Name'] = df['Name'].apply(lambda x: x if x.startswith('(') else x.split('(')[0].strip())
+        # Clean the 'Name' column
+        def clean_name(name):
+            if not isinstance(name, str):
+                return name  # Skip non-string values
+            
+            # Remove content inside parentheses (including the parentheses)
+            name = name.split('(')[0].strip()
+            
+            # List of words to remove
+            remove_words = ['feat.', 'Feat.', 'FEAT.']
+            
+            for word in remove_words:
+                # Remove the word from the name, ensuring it's stripped of surrounding spaces
+                name = name.replace(f" {word}", " ").replace(f"{word} ", "").replace(word, "")
+            
+            return name.strip()
+        
+        df['Name'] = df['Name'].apply(clean_name)
 
-
-    # Filling NaNs with the mean of the column
-    # df['Album'] = df['Album'].str.title()
-    # df['Genre'] = df['Genre'].str.title()
-    # df['Size'] = df['Size'].fillna(df['Size'].mean())
-    # df['Play Count'] = df['Play Count'].fillna(0)
-    # df['Total Time'] = df['Total Time'].fillna(df['Total Time'].mean())
-    # df['Release Date'] = pd.to_datetime(df['Release Date'], errors='coerce')
-    # df['Composer'] = df['Composer'].fillna('Unknown')
-    # df['Explicit'] = df['Explicit'].astype('boolean').fillna(False)
-    # df['Part Of Gapless Album'] = df['Part Of Gapless Album'].astype('boolean').fillna(False)
-    # df['Year'] = df['Year'].ffill()  # Fill missing values with the last valid observation
-    # df['Release Date'] = df['Release Date'].ffill() 
-    # missing_data = df.isnull().sum()
-    # print(missing_data)
-    
+    # Add a 'Spotify URI' column initialized with None
     df['Spotify URI'] = None
 
     # Save the cleaned DataFrame to a new CSV file
     df.to_csv(output_file_path, index=False)
     print(f"Data written to '{output_file_path}' successfully.")
+
 
 # Main function to load XML, extract the first <dict>, parse, and write to CSV
 def load_process_and_save(xml_file_path):
