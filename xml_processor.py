@@ -94,7 +94,8 @@ def write_to_cleaned_csv(songs_data, output_file_path):
                 return name  # Skip non-string values
             
             # Remove content inside parentheses (including the parentheses)
-            name = name.split('(')[0].strip()
+            if not name.startswith('('):
+                name = name.split('(')[0].strip()
             
             # List of words to remove
             remove_words = ['feat.', 'Feat.', 'FEAT.']
