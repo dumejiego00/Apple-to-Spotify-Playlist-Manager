@@ -107,7 +107,7 @@ def search_track(song_name, artist_name):
         if tracks:
             # Extract and return the track URI
             track_uri = tracks[0]['uri']
-            # print(f"Track found: {tracks[0]['name']} (URI: {track_uri})")
+            print(f"Track found: {tracks[0]['name']} (URI: {track_uri})")
             return track_uri
         else:
             print("No tracks found.")
@@ -139,10 +139,10 @@ def update_csv_with_spotify_uris(csv_file_path):
     for index, row in df.iterrows():
         if pd.isna(row['Spotify URI']):  # Only search if URI is missing
             song_name = row['Name']
-            album_artist = row['Album Artist']
+            artist = row['Artist']
             
-            if pd.notna(song_name) and pd.notna(album_artist):  # Ensure fields are not NaN
-                spotify_uri = search_track(song_name, album_artist)  # Call your search function
+            if pd.notna(song_name) and pd.notna(artist):  # Ensure fields are not NaN
+                spotify_uri = search_track(song_name, artist)  # Call your search function
                 df.at[index, 'Spotify URI'] = spotify_uri  # Update the DataFrame
             else:
                 print(f"Skipping row at index {index} due to missing data.")
@@ -153,5 +153,6 @@ def update_csv_with_spotify_uris(csv_file_path):
 
 # Run the update function
 if __name__ == "__main__":
-    update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH)
+    # update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH)
+    search_track("(Sittin' On) the Dock of the Bay", "Otis Redding")
 

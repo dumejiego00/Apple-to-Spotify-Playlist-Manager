@@ -9,13 +9,13 @@ CLEANED_CSV_FILE_PATH = 'cleaned_file.csv'    # Output path for cleaned CSV file
 KEYS_TO_DROP = [
     'Track ID', 'Kind',
     'Disc Number', 'Disc Count', 'Track Number', 'Track Count', 'Genre',
-    'Playlist Only', 'Sort Album Artist', 'Artist',
+    'Playlist Only', 'Sort Album Artist','Album Artist','Sort Artist',
     'Date Modified', 'Bit Rate', 'Movement Count', 'Movement Number',
     'Play Date', 'Play Date UTC', 'Grouping',
     'Skip Count', 'Skip Date', 'Normalization',
-    'Compilation', 'Sort Album', 'Sort Artist', 
+    'Compilation', 'Sort Album', 
     'Sort Composer', 'Sort Name', 'Persistent ID',
-    'Track Type', 'Purchased', 'Location', 
+    'Track Type', 'Purchased','Location', 
     'File Folder Count', 'Library Folder Count', 
     'Apple Music', 'Artwork Count', 'Date Added', 'Work',
     'Comments', 'Movement Name', 'Clean', 'Favorited', 'Loved',
@@ -88,7 +88,9 @@ def write_to_cleaned_csv(songs_data, output_file_path):
     df.drop(columns=KEYS_TO_DROP, errors='ignore', inplace=True)
 
     if 'Name' in df.columns:
-        df['Name'] = df['Name'].str.split('(').str[0].str.strip()
+        # Only split the name on '(' if it does not start with '('
+        df['Name'] = df['Name'].apply(lambda x: x if x.startswith('(') else x.split('(')[0].strip())
+
 
     # Filling NaNs with the mean of the column
     # df['Album'] = df['Album'].str.title()
