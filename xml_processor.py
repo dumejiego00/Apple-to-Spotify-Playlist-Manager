@@ -2,10 +2,8 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 pd.set_option('future.no_silent_downcasting', True)
 
-# Define your file paths here               # Path to your XML file
-CLEANED_CSV_FILE_PATH = 'cleaned_file.csv'    # Output path for cleaned CSV file
+CLEANED_CSV_FILE_PATH = 'cleaned_file.csv' 
 
-# List of keys (columns) to drop from the DataFrame
 KEYS_TO_DROP = [
     'Track ID', 'Kind',
     'Disc Number', 'Disc Count', 'Track Number', 'Track Count', 'Genre',
@@ -23,7 +21,6 @@ KEYS_TO_DROP = [
     'Year', 'Sample Rate', 'Album'
 ]
 
-# Load XML from a file
 def load_xml_file(file_path):
     try:
         tree = ET.parse(file_path)
@@ -32,31 +29,27 @@ def load_xml_file(file_path):
         print(f"Error loading XML file: {e}")
         return None
 
-# Extract the first <dict> tag under <key>Tracks</key>
 def extract_first_dict(root):
     tracks_found = False
     
     for element in root.iter():
         if element.tag == "key" and element.text == "Tracks":
-            tracks_found = True  # Mark that we've found Tracks
+            tracks_found = True  
         elif tracks_found and element.tag == "dict":
-            return element  # Return the first <dict> after Tracks
+            return element  
 
     return None
 
-# Parse the <dict> element to extract song data
 def parse_dict(element):
     songs_data = []
     
-    # Function to process each <dict> element and extract key-value pairs
     def process_single_dict(dict_elem):
         song_data = {}
         key = None
         for child in dict_elem:
             if child.tag == 'key':
-                key = child.text  # Store the key text
+                key = child.text  
             elif key:
-                # Store value based on tag type in a flat dictionary for CSV compatibility
                 if child.tag == 'integer':
                     song_data[key] = int(child.text)
                 elif child.tag == 'string':
@@ -70,33 +63,27 @@ def parse_dict(element):
                 key = None
         return song_data
 
-    # Iterate through all <dict> elements (each represents a track)
     for track in element.findall("dict"):
         songs_data.append(process_single_dict(track))
     
     return songs_data
 
-# Write song data to a cleaned CSV file
 def write_to_cleaned_csv(songs_data, output_file_path):
     if not songs_data:
         print("No song data available to write.")
         return
 
-    df = pd.DataFrame(songs_data)  # Create DataFrame from songs data
+    df = pd.DataFrame(songs_data)  
     
-    # Drop specified keys (columns) from the DataFrame
     df.drop(columns=KEYS_TO_DROP, errors='ignore', inplace=True)
 
     if 'Artist' in df.columns:
-        # Clean the 'Artist' column
         def clean_artist(artist):
             if not isinstance(artist, str):
-                return artist  # Skip non-string values
+                return artist  
             
-            # Remove "Namedarumaaz" to "Namedaruma"
             artist = artist.replace("Namedarumaaz", "Namedaruma")
             
-            # Replace & with ,
             artist = artist.replace(" &", ",")
             artist = artist.replace("&", ",")
             artist = artist.split(',')[0].strip()
@@ -105,7 +92,6 @@ def write_to_cleaned_csv(songs_data, output_file_path):
             remove_words = ['feat.', 'Feat.', 'FEAT.', 'featuring']
             
             for word in remove_words:
-                # Remove the word from the name, ensuring it's stripped of surrounding spaces
                 artist = artist.replace(f" {word}", " ").replace(f"{word} ", "").replace(word, "")
             
             return artist.strip()
@@ -113,45 +99,36 @@ def write_to_cleaned_csv(songs_data, output_file_path):
         df['Artist'] = df['Artist'].apply(clean_artist)
 
     if 'Name' in df.columns:
-        # Clean the 'Name' column
         def clean_name(name):
             if not isinstance(name, str):
-                return name  # Skip non-string values
+                return name  
             
-            # Remove content inside parentheses (including the parentheses)
             if not name.startswith('('):
                 name = name.split('(')[0].strip()
             
-            # Remove everything after "/"
             name = name.split("/")[0].strip()
             name = name.split(" - ")[0].strip()
             
-            # List of words to remove
             remove_words = ['feat.', 'Feat.', 'FEAT.', 'featuring']
             
             for word in remove_words:
-                # Remove the word from the name, ensuring it's stripped of surrounding spaces
                 name = name.replace(f" {word}", " ").replace(f"{word} ", "").replace(word, "")
             
             return name.strip()
         
         df['Name'] = df['Name'].apply(clean_name)
 
-    # Add a 'Spotify URI' column initialized with None
     df['Spotify URI'] = None
 
-    # Save the cleaned DataFrame to a new CSV file
     df.to_csv(output_file_path, index=False)
     print(f"Data written to '{output_file_path}' successfully.")
     
-# Main function to load XML, extract the first <dict>, parse, and write to CSV
 def load_process_and_save(xml_file_path):
     root = load_xml_file(xml_file_path)
     if root is not None:
         first_dict = extract_first_dict(root)
         if first_dict is not None:
-            # Parse the first dict directly and write data to CSV
-            songs_data = parse_dict(first_dict)  # Pass the first <dict> element
+            songs_data = parse_dict(first_dict)  
             write_to_cleaned_csv(songs_data, CLEANED_CSV_FILE_PATH)
         else:
             print("First <dict> not found.")
