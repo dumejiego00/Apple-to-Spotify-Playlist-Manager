@@ -139,7 +139,7 @@ def update_csv_with_spotify_uris(csv_file_path, found_uris_file_path, missing_ur
 
     if missing_uris_rows:
         missing_uris_df = pd.DataFrame(missing_uris_rows)
-        if 'spotify uri' in missing_uris_df.columns:
+        if 'Spotify Uri' in missing_uris_df.columns:
             missing_uris_df = missing_uris_df.drop(columns=['Spotify URI'])
         missing_uris_df.to_csv(missing_uris_file_path, index=False)
         print(f"Songs without URIs saved to '{missing_uris_file_path}'.")
