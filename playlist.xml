@@ -4,7 +4,7 @@
 <dict>
 	<key>Major Version</key><integer>1</integer>
 	<key>Minor Version</key><integer>1</integer>
-	<key>Date</key><date>2024-12-12T01:44:29Z</date>
+	<key>Date</key><date>2024-12-12T06:26:25Z</date>
 	<key>Application Version</key><string>1.4.6.32</string>
 	<key>Features</key><integer>5</integer>
 	<key>Show Content Ratings</key><true/>
@@ -30582,37 +30582,6 @@
 			<key>Apple Music</key><true/>
 			<key>Playlist Only</key><true/>
 		</dict>
-		<key>4502</key>
-		<dict>
-			<key>Track ID</key><integer>4502</integer>
-			<key>Name</key><string>Beautiful Ones (Remastered)</string>
-			<key>Artist</key><string>The London Suede</string>
-			<key>Album Artist</key><string>The London Suede</string>
-			<key>Composer</key><string>Anderson/Oakes</string>
-			<key>Album</key><string>Coming up (Remastered) [Deluxe Edition]</string>
-			<key>Genre</key><string>Alternative</string>
-			<key>Kind</key><string>Apple Music AAC audio file</string>
-			<key>Size</key><integer>9221457</integer>
-			<key>Total Time</key><integer>230867</integer>
-			<key>Disc Number</key><integer>1</integer>
-			<key>Disc Count</key><integer>2</integer>
-			<key>Track Number</key><integer>6</integer>
-			<key>Track Count</key><integer>20</integer>
-			<key>Year</key><integer>1996</integer>
-			<key>Date Modified</key><date>2024-08-10T01:02:29Z</date>
-			<key>Bit Rate</key><integer>256</integer>
-			<key>Sample Rate</key><integer>44100</integer>
-			<key>Release Date</key><date>1996-09-02T12:00:00Z</date>
-			<key>Artwork Count</key><integer>1</integer>
-			<key>Sort Album</key><string>Coming up (Remastered) [Deluxe Edition]</string>
-			<key>Sort Album Artist</key><string>London Suede</string>
-			<key>Sort Artist</key><string>London Suede</string>
-			<key>Sort Name</key><string>Beautiful Ones (Remastered)</string>
-			<key>Persistent ID</key><string>F013C824603DF014</string>
-			<key>Track Type</key><string>Remote</string>
-			<key>Apple Music</key><true/>
-			<key>Playlist Only</key><true/>
-		</dict>
 		<key>4504</key>
 		<dict>
 			<key>Track ID</key><integer>4504</integer>
@@ -33193,64 +33162,6 @@
 			<key>Sort Artist</key><string>KAN a.k.a. GAMI</string>
 			<key>Sort Name</key><string>Hikari to kage no machi</string>
 			<key>Persistent ID</key><string>9FAAF987E13E69A3</string>
-			<key>Track Type</key><string>Remote</string>
-			<key>Apple Music</key><true/>
-			<key>Playlist Only</key><true/>
-		</dict>
-		<key>4715</key>
-		<dict>
-			<key>Track ID</key><integer>4715</integer>
-			<key>Name</key><string>毒立毒歩 [MSW MIX] feat.DEV LARGE</string>
-			<key>Artist</key><string>KAN a.k.a. GAMI</string>
-			<key>Album Artist</key><string>KAN a.k.a. GAMI</string>
-			<key>Album</key><string>導 〜みちしるべ〜</string>
-			<key>Genre</key><string>Hip-Hop/Rap</string>
-			<key>Kind</key><string>Apple Music AAC audio file</string>
-			<key>Size</key><integer>7452568</integer>
-			<key>Total Time</key><integer>205800</integer>
-			<key>Disc Number</key><integer>1</integer>
-			<key>Disc Count</key><integer>1</integer>
-			<key>Track Number</key><integer>4</integer>
-			<key>Track Count</key><integer>16</integer>
-			<key>Year</key><integer>2005</integer>
-			<key>Date Modified</key><date>2024-08-18T16:49:34Z</date>
-			<key>Bit Rate</key><integer>256</integer>
-			<key>Sample Rate</key><integer>44100</integer>
-			<key>Release Date</key><date>2005-01-25T12:00:00Z</date>
-			<key>Artwork Count</key><integer>1</integer>
-			<key>Sort Album</key><string>導 〜みちしるべ〜</string>
-			<key>Sort Artist</key><string>KAN a.k.a. GAMI</string>
-			<key>Sort Name</key><string>毒立毒歩 [MSW MIX] feat.DEV LARGE</string>
-			<key>Persistent ID</key><string>6887B9BD3182DE95</string>
-			<key>Track Type</key><string>Remote</string>
-			<key>Apple Music</key><true/>
-			<key>Playlist Only</key><true/>
-		</dict>
-		<key>4717</key>
-		<dict>
-			<key>Track ID</key><integer>4717</integer>
-			<key>Name</key><string>音信不通</string>
-			<key>Artist</key><string>MSC</string>
-			<key>Album Artist</key><string>MSC</string>
-			<key>Album</key><string>新宿 STREET LIFE</string>
-			<key>Genre</key><string>Hip-Hop/Rap</string>
-			<key>Kind</key><string>Apple Music AAC audio file</string>
-			<key>Size</key><integer>10052339</integer>
-			<key>Total Time</key><integer>284467</integer>
-			<key>Disc Number</key><integer>1</integer>
-			<key>Disc Count</key><integer>1</integer>
-			<key>Track Number</key><integer>2</integer>
-			<key>Track Count</key><integer>17</integer>
-			<key>Year</key><integer>2006</integer>
-			<key>Date Modified</key><date>2024-08-18T16:50:06Z</date>
-			<key>Bit Rate</key><integer>256</integer>
-			<key>Sample Rate</key><integer>44100</integer>
-			<key>Release Date</key><date>2006-01-18T12:00:00Z</date>
-			<key>Artwork Count</key><integer>1</integer>
-			<key>Sort Album</key><string>新宿 STREET LIFE</string>
-			<key>Sort Artist</key><string>MSC</string>
-			<key>Sort Name</key><string>音信不通</string>
-			<key>Persistent ID</key><string>178E0F934FC0287F</string>
 			<key>Track Type</key><string>Remote</string>
 			<key>Apple Music</key><true/>
 			<key>Playlist Only</key><true/>
@@ -55150,9 +55061,6 @@
 					<key>Track ID</key><integer>4500</integer>
 				</dict>
 				<dict>
-					<key>Track ID</key><integer>4502</integer>
-				</dict>
-				<dict>
 					<key>Track ID</key><integer>4504</integer>
 				</dict>
 				<dict>
@@ -55391,12 +55299,6 @@
 				</dict>
 				<dict>
 					<key>Track ID</key><integer>4713</integer>
-				</dict>
-				<dict>
-					<key>Track ID</key><integer>4715</integer>
-				</dict>
-				<dict>
-					<key>Track ID</key><integer>4717</integer>
 				</dict>
 				<dict>
 					<key>Track ID</key><integer>4719</integer>
