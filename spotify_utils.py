@@ -180,8 +180,56 @@ def update_csv_with_spotify_uris(csv_file_path, found_uris_file_path, missing_ur
     else:
         print("No songs without URIs.")
 
+import requests
+
+def search_track_uri(track_uri):
+    """
+    Retrieves information for a track on Spotify using its URI.
+
+    Args:
+        track_uri (str): The Spotify URI of the track.
+
+    Returns:
+        dict: A dictionary containing track information if found, else None.
+    """
+    access_token = load_access_token()  # Ensure you have a valid access token
+
+    if not access_token:
+        print("Access token is missing or invalid.")
+        return None
+
+    # Extract track ID from the URI
+    track_id = track_uri.split(":")[-1]
+
+    # Base URL for Spotify track details
+    url = f"https://api.spotify.com/v1/tracks/{track_id}"
+
+    # Headers with authorization
+    headers = {
+        'Authorization': f'Bearer {access_token}'
+    }
+
+    # Make the request
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        # Return the track information as a dictionary
+        track_info = response.json()
+        print(f"Track information retrieved: {track_info['name']} by {', '.join(artist['name'] for artist in track_info['artists'])}")
+        return track_info
+    else:
+        print(f"Error: {response.status_code}, {response.text}")
+        return None
+
+# Example usage
+# track_uri = "spotify:track:3n3Ppam7vgaVa1iaRUc9Lp"
+# track_info = search_track_uri(track_uri)
+# print(track_info)
+
+
 # Run the update function
 if __name__ == "__main__":
     update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH, FOUND_URI_FILE_PATH,MISSING_URI_FILE_PATH)
     # search_track("(Sittin' On) the Dock of the Bay", "Otis Redding")
+    # search_track_uri("4OssqCixV2Xsxd43wMIQyS")
 

@@ -96,6 +96,18 @@ def write_to_cleaned_csv(songs_data, output_file_path):
             # Remove "Namedarumaaz" to "Namedaruma"
             artist = artist.replace("Namedarumaaz", "Namedaruma")
             
+            # Replace & with ,
+            artist = artist.replace(" &", ",")
+            artist = artist.replace("&", ",")
+            artist = artist.split(',')[0].strip()
+            artist = artist.split('loves')[0].strip()
+
+            remove_words = ['feat.', 'Feat.', 'FEAT.', 'featuring']
+            
+            for word in remove_words:
+                # Remove the word from the name, ensuring it's stripped of surrounding spaces
+                artist = artist.replace(f" {word}", " ").replace(f"{word} ", "").replace(word, "")
+            
             return artist.strip()
         
         df['Artist'] = df['Artist'].apply(clean_artist)
@@ -112,9 +124,10 @@ def write_to_cleaned_csv(songs_data, output_file_path):
             
             # Remove everything after "/"
             name = name.split("/")[0].strip()
+            name = name.split(" - ")[0].strip()
             
             # List of words to remove
-            remove_words = ['feat.', 'Feat.', 'FEAT.']
+            remove_words = ['feat.', 'Feat.', 'FEAT.', 'featuring']
             
             for word in remove_words:
                 # Remove the word from the name, ensuring it's stripped of surrounding spaces
@@ -130,6 +143,7 @@ def write_to_cleaned_csv(songs_data, output_file_path):
     # Save the cleaned DataFrame to a new CSV file
     df.to_csv(output_file_path, index=False)
     print(f"Data written to '{output_file_path}' successfully.")
+    
 # Main function to load XML, extract the first <dict>, parse, and write to CSV
 def load_process_and_save(xml_file_path):
     root = load_xml_file(xml_file_path)
