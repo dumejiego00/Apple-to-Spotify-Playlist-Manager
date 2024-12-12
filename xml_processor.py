@@ -87,6 +87,19 @@ def write_to_cleaned_csv(songs_data, output_file_path):
     # Drop specified keys (columns) from the DataFrame
     df.drop(columns=KEYS_TO_DROP, errors='ignore', inplace=True)
 
+    if 'Artist' in df.columns:
+        # Clean the 'Artist' column
+        def clean_artist(artist):
+            if not isinstance(artist, str):
+                return artist  # Skip non-string values
+            
+            # Remove "Namedarumaaz" to "Namedaruma"
+            artist = artist.replace("Namedarumaaz", "Namedaruma")
+            
+            return artist.strip()
+        
+        df['Artist'] = df['Artist'].apply(clean_artist)
+
     if 'Name' in df.columns:
         # Clean the 'Name' column
         def clean_name(name):
@@ -96,6 +109,9 @@ def write_to_cleaned_csv(songs_data, output_file_path):
             # Remove content inside parentheses (including the parentheses)
             if not name.startswith('('):
                 name = name.split('(')[0].strip()
+            
+            # Remove everything after "/"
+            name = name.split("/")[0].strip()
             
             # List of words to remove
             remove_words = ['feat.', 'Feat.', 'FEAT.']
@@ -114,8 +130,6 @@ def write_to_cleaned_csv(songs_data, output_file_path):
     # Save the cleaned DataFrame to a new CSV file
     df.to_csv(output_file_path, index=False)
     print(f"Data written to '{output_file_path}' successfully.")
-
-
 # Main function to load XML, extract the first <dict>, parse, and write to CSV
 def load_process_and_save(xml_file_path):
     root = load_xml_file(xml_file_path)
