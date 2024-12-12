@@ -99,6 +99,8 @@ def search_track(song_name, artist_name):
             return None
     else:
         print(f"Error: {response.status_code}, {response.text}")
+
+        # print(f"Retry after{response.headers['retry-after']}")
         return None
 
 def update_csv_with_spotify_uris(csv_file_path, found_uris_file_path, missing_uris_file_path):
