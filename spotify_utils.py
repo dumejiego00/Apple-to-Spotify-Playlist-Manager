@@ -2,6 +2,7 @@ from token_manager import load_access_token
 import pandas as pd
 import os
 import requests
+import csv
 
 CLEANED_CSV_FILE_PATH = 'cleaned_file.csv'
 MISSING_URI_FILE_PATH = 'missing_uri_file.csv'
@@ -215,9 +216,44 @@ def get_user_playlist():
     else:
         print(f"Error: {response.status_code}, {response.json()}")
         return None
+
+
+def read_csv(file_path):
+    """
+    Reads the CSV file and extracts Spotify URIs.
+    """
+    uris = []
+    with open(file_path, 'r') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            uris.append(row['Spotify URI'])
+    return uris
+
+def chunk_uris(uris, chunk_size=100):
+    """
+    Splits the list of URIs into chunks of a given size.
+    """
+    return [uris[i:i + chunk_size] for i in range(0, len(uris), chunk_size)]
+
+def add_tracks_to_playlist(playlist_id, uri_chunks):
+    """
+    Adds tracks to a Spotify playlist in batches of 100 URIs.
+    """
+    access_token = load_access_token()
+    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
+    for index, chunk in enumerate(uri_chunks):
+        data = {"uris": chunk}
+        response = requests.post(url, headers=headers, json=data)
+        if response.status_code == 201:
+            print(f"Batch {index + 1}/{len(uri_chunks)} added successfully.")
+        else:
+            print(f"Error adding batch {index + 1}: {response.status_code} - {response.json()}")
     
 if __name__ == "__main__":
     # update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH, FOUND_URI_FILE_PATH,MISSING_URI_FILE_PATH)
     # search_track("(Sittin' On) the Dock of the Bay", "Otis Redding")
-    # search_track_uri("4OssqCixV2Xsxd43wMIQyS")
     get_user_playlist()
