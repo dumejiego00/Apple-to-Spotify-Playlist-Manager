@@ -181,8 +181,43 @@ def search_track_uri(track_uri):
     else:
         print(f"Error: {response.status_code}, {response.text}")
         return None
+
+def get_user_playlist():
+    access_token = load_access_token()
+
+    if not access_token:
+        print("Access token is missing or invalid")
+        return None
+
+    url = 'https://api.spotify.com/v1/me/playlists'
+
+    headers = {
+        'Authorization': f'Bearer {access_token}'
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        playlists = response.json()["items"]
+        print("Playlists retrieved successfully:")
+        for index, playlist in enumerate(playlists):
+            print(f"{index + 1}: {playlist['name']} (ID: {playlist['id']})")
+        
+        # Allow user to pick a playlist
+        choice = int(input("\nEnter the number of the playlist to select: ")) - 1
+        if 0 <= choice < len(playlists):
+            selected_playlist = playlists[choice]
+            print(f"\nYou selected: {selected_playlist['name']} (ID: {selected_playlist['id']})")
+            return selected_playlist["id"]
+        else:
+            print("Invalid selection.")
+            return None
+    else:
+        print(f"Error: {response.status_code}, {response.json()}")
+        return None
     
 if __name__ == "__main__":
-    update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH, FOUND_URI_FILE_PATH,MISSING_URI_FILE_PATH)
+    # update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH, FOUND_URI_FILE_PATH,MISSING_URI_FILE_PATH)
     # search_track("(Sittin' On) the Dock of the Bay", "Otis Redding")
     # search_track_uri("4OssqCixV2Xsxd43wMIQyS")
+    get_user_playlist()
