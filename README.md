@@ -1,0 +1,2 @@
+学んだこと
+1. Playlist Id, など個人情報はrepositoryをシェアすることを考えて開発段階においても.gitignoreに記載されたファイルに出力する方がいい。そうするとpush historyにも残らない。
