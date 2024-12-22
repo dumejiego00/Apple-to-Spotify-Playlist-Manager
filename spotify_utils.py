@@ -175,7 +175,6 @@ def get_user_playlist():
 
     if response.status_code == 200:
         playlists = response.json()["items"]
-        print(f"{response.json()["total"]}")
         print("Playlists retrieved successfully:")
         for index, playlist in enumerate(playlists):
             print(f"{index + 1}: {playlist['name']} (ID: {playlist['id']})")
