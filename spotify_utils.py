@@ -1,4 +1,5 @@
 from token_manager import load_access_token
+from xml_processor import load_process_and_save
 import pandas as pd
 import os
 import requests
@@ -27,32 +28,6 @@ def get_playlist_details(playlist_id):
             print(f"Spotify URL: {playlist['external_urls']['spotify']}")
         else:
             print(f"Error: {response.status_code}, {response.text}")
-
-def add_track_to_playlist(track_url, playlist_id):
-    access_token = load_access_token() 
-
-    if not access_token:
-        print("Error: Access token not available.")
-        return
-
-    track_id = track_url.split("/")[-1].split("?")[0]  
-    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-    headers = {
-        'Authorization': f'Bearer {access_token}',  
-        'Content-Type': 'application/json' 
-    }
-
-    data = {
-        "uris": [f"spotify:track:{track_id}"],  
-        "position": 0  
-    }
-
-    response = requests.post(url, headers=headers, json=data) 
-
-    if response.status_code == 201:
-        print(f"Track {track_id} successfully added to playlist {playlist_id}.")
-    else:
-        print(f"Error: {response.status_code}, {response.text}")
 
 def search_track(song_name, artist_name):
     """
@@ -96,7 +71,7 @@ def search_track(song_name, artist_name):
             print(f"Track found: {tracks[0]['name']} (URI: {track_uri})")
             return track_uri
         else:
-            print("No tracks found.")
+            print(f"No tracks found: {song_name}")
             return None
     else:
         print(f"Error: {response.status_code}, {response.text}")
@@ -200,12 +175,13 @@ def get_user_playlist():
 
     if response.status_code == 200:
         playlists = response.json()["items"]
+        print(f"{response.json()["total"]}")
         print("Playlists retrieved successfully:")
         for index, playlist in enumerate(playlists):
             print(f"{index + 1}: {playlist['name']} (ID: {playlist['id']})")
         
         # Allow user to pick a playlist
-        choice = int(input("\nEnter the number of the playlist to select: ")) - 1
+        choice = int(input("\nEnter the number of the playlist to update: ")) - 1
         if 0 <= choice < len(playlists):
             selected_playlist = playlists[choice]
             print(f"\nYou selected: {selected_playlist['name']} (ID: {selected_playlist['id']})")
@@ -249,11 +225,15 @@ def add_tracks_to_playlist(playlist_id, uri_chunks):
         data = {"uris": chunk}
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 201:
-            print(f"Batch {index + 1}/{len(uri_chunks)} added successfully.")
+            print(f"Batch {index + 1}/{len(uri_chunks)} added successfully!")
         else:
             print(f"Error adding batch {index + 1}: {response.status_code} - {response.json()}")
+
+def master():
+    load_process_and_save("playlist.xml")
+    update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH, FOUND_URI_FILE_PATH,MISSING_URI_FILE_PATH)
+    selected_playlist_id = get_user_playlist()
+    add_tracks_to_playlist(selected_playlist_id,chunk_uris(read_csv(FOUND_URI_FILE_PATH)))
     
 if __name__ == "__main__":
-    # update_csv_with_spotify_uris(CLEANED_CSV_FILE_PATH, FOUND_URI_FILE_PATH,MISSING_URI_FILE_PATH)
-    # search_track("(Sittin' On) the Dock of the Bay", "Otis Redding")
-    get_user_playlist()
+    master()

@@ -135,5 +135,5 @@ def load_process_and_save(xml_file_path):
     else:
         print("Failed to extract data from XML.")
 
-if __name__ == "__main__":
-    load_process_and_save("playlist.xml")
+# if __name__ == "__main__":
+#     load_process_and_save("playlist.xml")
