@@ -61,6 +61,9 @@ python token_manager.py
 Follow the link provided in the terminal, log in to your Spotify account, and approve the app. This will create a `token.json` file in the directory. Press `CTRL+C` to quit after successful login.
 
 ### 5. Transfer Songs to a Spotify Playlist
+
+**To maximize the number of songs transferred from your Apple Music playlist, it is recommended to first run xml_processor.py to identify songs without URIs. Then, proceed to Step 6 to address these missing songs before returning to continue the process.**
+
 Run `spotify_utils.py`:
 
 ```bash
