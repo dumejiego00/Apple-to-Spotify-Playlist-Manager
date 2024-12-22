@@ -1,4 +1,4 @@
-# Spotify Playlist Transfer Program
+# Apple-to-Spotify-Playlist-Manager
 
 This program helps transfer songs from an Apple Music playlist (exported as an XML file) to a Spotify playlist. While it automates much of the process, it does not guarantee that all songs will be transferred. You can use built-in tools to capture as many songs as possible and manually adjust where necessary.
 
