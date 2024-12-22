@@ -28,10 +28,10 @@ def generateRandomString(length):
 # Retrieve client ID and client secret from environment variables
 client_id = os.getenv('SPOTIFY_CLIENT_ID')
 client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
+redirect_uri = os.getenv('SPOTIFY_REDIRECT_URI')
 
 # Scopes and redirect URI
 scopes = "playlist-modify-public playlist-modify-private"
-redirect_uri = "http://127.0.0.1:8888/callback"
 state = generateRandomString(16)
 
 # Authorization URL
