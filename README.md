@@ -40,7 +40,7 @@ Export an `.xml` file from the Apple Music desktop app and rename it to `playlis
 ![Playlist Transfer Example](img/export_apple_playlist.png "Example Image")
 
 ### 2. Get Spotify Credentials
-Retrieve your `client_id` and `client_secret` from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/).
+Retrieve your `Client ID` and `Client secret` from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/).
 If this is your first time using Spotify API, you'll have to create an app and then access the developer dashboard.
 
 ### 3. Create a `.env` File
